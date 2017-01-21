@@ -1,7 +1,7 @@
 import numpy 
 import math
  
-class cube:
+class cube(object):
 
   def __init__(self, fname):
 
@@ -127,6 +127,31 @@ class cube:
 
       return vol
 
+  def __repr__ (self):
+
+      str = "cube file\ngenerated\n"
+      str += "%4d %.6f %.6f %.6f\n" % \
+              (self.__natoms, self.__origin[0], self.__origin[1], \
+              self.__origin[2])
+      str += "%4d %.6f %.6f %.6f\n"% \
+              (self.__nx, self.__x[0], self.__x[1], self.__x[2])
+      str += "%4d %.6f %.6f %.6f\n"% \
+              (self.__ny, self.__y[0], self.__y[1], self.__y[2])
+      str += "%4d %.6f %.6f %.6f\n"% \
+              (self.__nz, self.__z[0], self.__z[1], self.__z[2])
+
+      for atom in self.__atoms:
+          str += "%s %d %s %s %s\n"% \
+                  (atom[0], 0, atom[1], atom[2], atom[3])
+      
+      for ix in xrange(self.__nx):
+          for iy in xrange(self.__ny):
+              for iz in xrange(self.__nz):
+                   str += "%.5e "% self.__data[ix,iy,iz]
+                   if (iz % 6 == 5): 
+                       str += '\n'
+      
+      return str
 
   def dump(self, f):
 
@@ -148,7 +173,7 @@ class cube:
       for ix in xrange(self.__nx):
           for iy in xrange(self.__ny):
               for iz in xrange(self.__nz):
-                   print >>f, "%.5e " % self.__data[ix,iy,iz],
+                   print >> f, "%.5e " % self.__data[ix,iy,iz]
                    if (iz % 6 == 5): 
                        print >> f, ''
       

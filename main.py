@@ -13,6 +13,8 @@ else:
 
 cube = load_cube.cube(filename)
 
+print cube
+
 print "Number of points: " , \
         (cube.get_nx()*cube.get_ny()*cube.get_nz())
 print "Total volume: ", cube.get_volume()
