@@ -1,5 +1,46 @@
 import numpy 
 import math
+
+class atom(object): 
+  def __init__(self, zin, charge, x, y, z):
+    self.__z = zin
+    self.__coordinates = (x, y, z)
+    self.__charge = charge
+  
+  def set_Z(self, zin): 
+    self.__z = zin
+  
+  def get_Z(self):
+    return self.__z
+
+  def set_coordinates(self, x, y, z):
+    self.__coordinates = (x, y, z)
+
+  def get_x(self):
+    return self.__coordinates[0]
+
+  def get_y(self):
+    return self.__coordinates[1]
+
+  def get_z(self):
+    return self.__coordinates[2]
+
+  def get_coordinates(self):
+    return self.__coordinatess
+
+  def set_charge (self, charge):
+    self.__charge = charge
+
+  def get_charge (self):
+    return self.__charge
+
+  def get_str(self):
+    return '%4d %10.6f %10.6f %10.6f %10.6f' % (self.__z, 
+        self.__charge, self.__coordinates[0], self.__coordinates[1],
+        self.__coordinates[2])
+
+  def __repr__(self): # overloads printing
+    return self.get_str()
  
 class cube(object):
 
@@ -47,7 +88,9 @@ class cube(object):
       
       for i in range(self.__natoms):
           line = f.readline().split()
-          self.__atoms.append([line[0], line[2], line[3], line[4]])
+          a = atom(int(line[0]), float(line[1]),  float(line[2]), \
+                float(line[3]),  float(line[4]))
+          self.__atoms.append(a)
         
       self.__data = numpy.zeros((self.__nx,self.__ny,self.__nz))
       i = 0
@@ -106,6 +149,17 @@ class cube(object):
   def get_nz(self):
       return self.__nz
 
+  def get_dx(self):
+      return self.__x[0]
+
+
+  def get_dy(self):
+      return self.__y[1]
+
+
+  def get_dz(self):
+      return self.__z[2]
+
 
   def get_x(self):
       return self.__x
@@ -121,16 +175,15 @@ class cube(object):
 
   def get_volume(self):
 
-      vol = (self.__nx - 1) * self.__x[0] * \
-            (self.__ny - 1) * self.__y[1] * \
-            (self.__nz - 1) * self.__z[2]
+      vol = (self.__nx - 1) * self.get_x() * \
+            (self.__ny - 1) * self.get_y() * \
+            (self.__nz - 1) * self.get_z()
 
       return vol
 
-  def __repr__ (self):
+  def get_str(self):
 
-      str = "cube file\ngenerated\n"
-      str += "%4d %.6f %.6f %.6f\n" % \
+      str = "%4d %.6f %.6f %.6f\n" % \
               (self.__natoms, self.__origin[0], self.__origin[1], \
               self.__origin[2])
       str += "%4d %.6f %.6f %.6f\n"% \
@@ -140,9 +193,8 @@ class cube(object):
       str += "%4d %.6f %.6f %.6f\n"% \
               (self.__nz, self.__z[0], self.__z[1], self.__z[2])
 
-      for atom in self.__atoms:
-          str += "%s %d %s %s %s\n"% \
-                  (atom[0], 0, atom[1], atom[2], atom[3])
+      for a in self.__atoms:
+          str += a.get_str() + "\n"
       
       for ix in xrange(self.__nx):
           for iy in xrange(self.__ny):
@@ -153,32 +205,18 @@ class cube(object):
       
       return str
 
+
+  def __repr__ (self):
+
+      str = "cube file\ngenerated\n"
+      str += self.get_str()
+      
+      return str
+
   def dump(self, f):
 
       print >> f, "cube file\ngenerated"
-      print >> f, "%4d %.6f %.6f %.6f" % \
-              (self.__natoms, self.__origin[0], self.__origin[1], \
-              self.__origin[2])
-      print >> f, "%4d %.6f %.6f %.6f"% \
-              (self.__nx, self.__x[0], self.__x[1], self.__x[2])
-      print >> f, "%4d %.6f %.6f %.6f"% \
-              (self.__ny, self.__y[0], self.__y[1], self.__y[2])
-      print >> f, "%4d %.6f %.6f %.6f"% \
-              (self.__nz, self.__z[0], self.__z[1], self.__z[2])
-
-      for atom in self.__atoms:
-          print >> f, "%s %d %s %s %s" % \
-                  (atom[0], 0, atom[1], atom[2], atom[3])
-      
-      for ix in xrange(self.__nx):
-          for iy in xrange(self.__ny):
-              for iz in xrange(self.__nz):
-                   print >> f, "%.5e " % self.__data[ix,iy,iz]
-                   if (iz % 6 == 5): 
-                       print >> f, ''
-      
-              print >> f,  ""
- 
+      print >> f, self.get_str()
 
   def mask_sphere(self, r, cx, cy, cz):
       # cut a sphere with radius r and center in [cx,cy,cz]
