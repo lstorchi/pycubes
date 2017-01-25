@@ -172,6 +172,23 @@ class cube(object):
   def get_z(self):
       return self.__z
 
+  def integrate (self, axis=""):
+
+      if axis == "":
+          itgr = numpy.sum(self.__data) * self.get_dx() * self.get_dy() * \
+                  self.get_dz()
+          return itgr
+      elif axis == "xy":
+          itgr = numpy.sum(self.__data, axis=(0,1)) * self.get_dx() * self.get_dy()
+          return itgr
+      elif axis == "yz":
+          itgr = numpy.sum(self.__data, axis=(1,2)) * self.get_dy() * self.get_dz()
+          return itgr
+      elif axis == "xz":
+          itgr = numpy.sum(self.__data, axis=(0,2)) * self.get_dx() * self.get_dy()
+          return itgr
+
+      return None
 
   def get_volume(self):
 

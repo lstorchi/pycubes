@@ -13,7 +13,14 @@ else:
 
 cube = load_cube.cube(filename)
 
-print cube
+#print cube
+
+print cube.integrate()
+vals = cube.integrate("xy")
+for v in vals:
+    print v
+#print cube.integrate("yz")
+#print cube.integrate("xz")
 
 print "Number of points: " , \
         (cube.get_nx()*cube.get_ny()*cube.get_nz())
