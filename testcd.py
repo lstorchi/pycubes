@@ -1,4 +1,5 @@
 import sys
+import numpy
 
 sys.path.append("./modules")
 import load_cube
@@ -22,9 +23,12 @@ cubeB = load_cube.cube(filenameb)
 cube1 = cubeAB - cubeA
 cube = cube1 - cubeB
 
-print cube
+#print cube
 
-print cube.integrate()
+ymin = cube.get_origin()[1]
+dy = cube.get_dy()
 vals = cube.integrate("xy")
-#for v in vals:
-#    print v
+i = 0
+for v in vals:
+    print ymin+i*dy, numpy.sum( vals[:i] ) * dy, v
+    i = i + 1

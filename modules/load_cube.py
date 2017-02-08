@@ -225,9 +225,7 @@ class cube(object):
       for ix in xrange(self.__nx):
           for iy in xrange(self.__ny):
               for iz in xrange(self.__nz):
-                   str += "%.5e "% self.__data[ix,iy,iz]
-                   if (iz % 6 == 5): 
-                       str += '\n'
+                   str += "%.5e \n"% self.__data[ix,iy,iz]
       
       return str
 
