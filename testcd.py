@@ -1,6 +1,8 @@
 import sys
 import numpy
 
+import matplotlib.pyplot as plt
+
 sys.path.append("./modules")
 import load_cube
 
@@ -29,6 +31,21 @@ ymin = cube.get_origin()[1]
 dy = cube.get_dy()
 vals = cube.integrate("xy")
 i = 0
+xv = []
+cd = []
+vl = []
 for v in vals:
-    print ymin+i*dy, numpy.sum( vals[:i] ) * dy, v
+    xv.append(ymin+i*dy) 
+    cd.append(numpy.sum( vals[:i] ) * dy)
+    vl.append(v)
     i = i + 1
+
+plt.clf()
+plt.plot(xv, cd, 'red', linestyle='--', linewidth=2, label='CD')
+plt.plot(xv, vl, 'blue', linestyle='--', linewidth=2, label='VALUES')
+legend = plt.legend(loc='upper right', shadow=True, fontsize='small')
+
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.show()
+
